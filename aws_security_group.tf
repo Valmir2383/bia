@@ -27,7 +27,7 @@ resource "aws_security_group" "bia_web" {
   revoke_rules_on_delete = null
   tags                   = {}
   tags_all               = {}
-  vpc_id                 = "vpc-07400a2ed02c4aba4"
+  vpc_id                 = local.vpc_id
 }
 
 resource "aws_security_group" "bia_alb" {
@@ -79,7 +79,7 @@ resource "aws_security_group" "bia_alb" {
   revoke_rules_on_delete = null
   tags                   = {}
   tags_all               = {}
-  vpc_id                 = "vpc-07400a2ed02c4aba4"
+  vpc_id                 = local.vpc_id
 }
 
 resource "aws_security_group" "bia_ec2" {
@@ -111,7 +111,7 @@ resource "aws_security_group" "bia_ec2" {
   revoke_rules_on_delete = null
   tags                   = {}
   tags_all               = {}
-  vpc_id                 = "vpc-07400a2ed02c4aba4"
+  vpc_id                 = local.vpc_id
 }
 
 resource "aws_security_group" "bia_db" {
@@ -163,13 +163,13 @@ resource "aws_security_group" "bia_db" {
   revoke_rules_on_delete = null
   tags                   = {}
   tags_all               = {}
-  vpc_id                 = "vpc-07400a2ed02c4aba4"
+  vpc_id                 = local.vpc_id
 }
 
 resource "aws_security_group" "bia_dev" {
   name        = "bia-dev"
   description = "aceso da bia dev"
-  vpc_id      = "vpc-07400a2ed02c4aba4"
+  vpc_id      = local.vpc_id
 
   ingress {
     description = "acesso geral"
