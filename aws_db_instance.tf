@@ -16,14 +16,13 @@ resource "aws_db_instance" "bia" {
   custom_iam_instance_profile           = null
   customer_owned_ip_enabled             = false
   db_name                               = null
-  db_subnet_group_name                  = "default-vpc-07400a2ed02c4aba4"
   delete_automated_backups              = true
   deletion_protection                   = false
   domain                                = null
   domain_iam_role_name                  = null
   enabled_cloudwatch_logs_exports       = []
   engine                                = "postgres"
-  engine_version                        = "14.7"
+  engine_version                        = "16.1"
   final_snapshot_identifier             = null
   iam_database_authentication_enabled   = false
   identifier                            = "bia"
@@ -32,7 +31,7 @@ resource "aws_db_instance" "bia" {
   iops                                  = 0
   license_model                         = "postgresql-license"
   maintenance_window                    = "fri:09:41-fri:10:11"
-  manage_master_user_password           = null
+  manage_master_user_password           = true
   master_user_secret_kms_key_id         = null
   max_allocated_storage                 = 1000
   monitoring_interval                   = 0
@@ -40,8 +39,8 @@ resource "aws_db_instance" "bia" {
   multi_az                              = false
   nchar_character_set_name              = null
   network_type                          = "IPV4"
-  option_group_name                     = "default:postgres-14"
-  parameter_group_name                  = "default.postgres14"
+  option_group_name                     = "default:postgres-16"
+  parameter_group_name                  = "default.postgres16"
   password                              = null # sensitive
   performance_insights_enabled          = false
   performance_insights_kms_key_id       = null
