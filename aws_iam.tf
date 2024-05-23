@@ -1,6 +1,6 @@
 resource "aws_iam_instance_profile" "role_acesso_ssm" {
   name        = "role-acesso-ssm"
-  name_prefix = null
+  name_prefix = null  
   path        = "/"
   role        = aws_iam_role.role_acesso_ssm.name
   tags        = {}
