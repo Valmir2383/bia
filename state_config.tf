@@ -1,8 +1,8 @@
 terraform {
   backend "s3" {
-    bucket  = "terraform-bia-state"
+    bucket  = "[SEU_BUCKET]"
     key     = "terraform.tfstate"
     region  = "us-east-1"
-    profile = "bia-tf"
+    profile = "[SEU_PROFILE]"
   }
 }
