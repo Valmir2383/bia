@@ -7,7 +7,6 @@ resource "aws_db_instance" "bia" {
   allow_major_version_upgrade           = null
   apply_immediately                     = null
   auto_minor_version_upgrade            = true
-  availability_zone                     = "us-east-1d"
   backup_retention_period               = 1
   backup_window                         = "04:47-05:17"
   ca_cert_identifier                    = "rds-ca-2019"
@@ -59,4 +58,14 @@ resource "aws_db_instance" "bia" {
   timezone                              = null
   username                              = "postgres"
   vpc_security_group_ids                = [aws_security_group.bia_db.id]
+  db_subnet_group_name = aws_db_subnet_group.bia.name
+}
+
+resource "aws_db_subnet_group" "bia" {
+  name = "bia-subnet-group"
+  subnet_ids = [local.subnet_zona_a,local.subnet_zona_b]
+
+  tags = {
+    name="bia-subnet-group"
+  }
 }
