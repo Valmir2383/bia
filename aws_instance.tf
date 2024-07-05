@@ -5,6 +5,8 @@ resource "aws_instance" "bia_dev" {
     ambiente = "dev"
     Name     = var.instance_name
   }
+  subnet_id = local.subnet_zona_a
+  associate_public_ip_address = true
   vpc_security_group_ids = [aws_security_group.bia_dev.id]
   root_block_device {
     volume_size = 12
