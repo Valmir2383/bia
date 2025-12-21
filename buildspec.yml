@@ -25,6 +25,5 @@ phases:
 
 # ESTA SEÇÃO DEVE FICAR FORA DAS PHASES (ALINHADA À ESQUERDA)
 artifacts:
-  files:
-    - imagedefinitions.json
-    - '**/*'
+  files: imagedefinitions.json
+    
