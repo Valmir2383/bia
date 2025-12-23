@@ -24,9 +24,9 @@ COPY . .
 # Build do front-end com Vite baseado no ambiente
 RUN cd client && \
     if [ "$ENVIRONMENT" = "staging" ]; then \
-        VITE_API_URL=https://bia-staging.exemplo.com npm run build; \
+        VITE_API_URL=/api npm run build; \
     else \
-        VITE_API_URL=https://bia-prod.exemplo.com npm run build; \
+        VITE_API_URL=/api npm run build; \
     fi
 
 # Limpeza das dependências de desenvolvimento do client para reduzir tamanho

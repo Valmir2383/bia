@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topologia AWS - Projeto BIA</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #232F3E;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.2em;
+        }
+        .aws-region {
+            border: 3px solid #FF9900;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            background: #FFF8F0;
+            position: relative;
+        }
+        .region-label {
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: #FF9900;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .service-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 30px 0;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .service-box {
+            flex: 1;
+            min-width: 280px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            background: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .service-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+        }
+        .service-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+        .service-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #232F3E;
+        }
+        .service-desc {
+            font-size: 0.9em;
+            color: #666;
+            line-height: 1.4;
+        }
+        .pipeline-flow {
+            background: #E8F4FD;
+            border: 2px solid #2196F3;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+        .flow-step {
+            display: inline-block;
+            background: #2196F3;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            margin: 5px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+        .arrow {
+            display: inline-block;
+            margin: 0 10px;
+            font-size: 1.5em;
+            color: #2196F3;
+        }
+        .environment-section {
+            display: flex;
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .env-box {
+            flex: 1;
+            border: 2px solid #4CAF50;
+            border-radius: 10px;
+            padding: 20px;
+            background: #F8FFF8;
+        }
+        .env-box.staging {
+            border-color: #FF9800;
+            background: #FFF8F0;
+        }
+        .env-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #4CAF50;
+        }
+        .env-title.staging {
+            color: #FF9800;
+        }
+        .cost-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .cost-table th {
+            background: #232F3E;
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+        .cost-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .cost-table tr:hover {
+            background: #f5f5f5;
+        }
+        .total-row {
+            background: #FF9900 !important;
+            color: white;
+            font-weight: bold;
+        }
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏗️ Topologia AWS - Projeto BIA</h1>
+        <p class="subtitle">Pipeline CI/CD com ECS, ECR, RDS e Monitoramento</p>
+
+        <div class="aws-region">
+            <div class="region-label">AWS Region: us-east-1</div>
+            
+            <!-- CI/CD Pipeline -->
+            <div class="pipeline-flow">
+                <h3 style="margin-top: 0; color: #2196F3;">🔄 Pipeline CI/CD</h3>
+                <div style="text-align: center;">
+                    <span class="flow-step">GitHub</span>
+                    <span class="arrow">→</span>
+                    <span class="flow-step">GitHub Actions</span>
+                    <span class="arrow">→</span>
+                    <span class="flow-step">CodeBuild</span>
+                    <span class="arrow">→</span>
+                    <span class="flow-step">ECR</span>
+                    <span class="arrow">→</span>
+                    <span class="flow-step">ECS Deploy</span>
+                </div>
+            </div>
+
+            <!-- Compute & Container Services -->
+            <h3 style="color: #232F3E; border-bottom: 2px solid #FF9900; padding-bottom: 10px;">🖥️ Compute & Container</h3>
+            <div class="service-row">
+                <div class="service-box">
+                    <div class="service-icon">🐳</div>
+                    <div class="service-title">ECS Production</div>
+                    <div class="service-desc">
+                        Cluster: bia-cluster-production<br>
+                        Service: bia-production<br>
+                        Branch: main
+                    </div>
+                </div>
+                <div class="service-box">
+                    <div class="service-icon">🧪</div>
+                    <div class="service-title">ECS Staging</div>
+                    <div class="service-desc">
+                        Cluster: bia-cluster-staging<br>
+                        Service: bia-staging<br>
+                        Branch: develop
+                    </div>
+                </div>
+                <div class="service-box">
+                    <div class="service-icon">💻</div>
+                    <div class="service-title">EC2 Instance</div>
+                    <div class="service-desc">
+                        Type: t3.micro<br>
+                        AMI: ami-02f3f602d23f1659d<br>
+                        SSM Session Manager
+                    </div>
+                </div>
+            </div>
+
+            <!-- Storage & Data Services -->
+            <h3 style="color: #232F3E; border-bottom: 2px solid #FF9900; padding-bottom: 10px;">💾 Storage & Data</h3>
+            <div class="service-row">
+                <div class="service-box">
+                    <div class="service-icon">📦</div>
+                    <div class="service-title">ECR Registry</div>
+                    <div class="service-desc">
+                        bia-production<br>
+                        bia-staging<br>
+                        Docker Images
+                    </div>
+                </div>
+                <div class="service-box">
+                    <div class="service-icon">🗄️</div>
+                    <div class="service-title">RDS PostgreSQL</div>
+                    <div class="service-desc">
+                        Instance: t3.micro<br>
+                        Engine: PostgreSQL<br>
+                        Multi-AZ: No
+                    </div>
+                </div>
+                <div class="service-box">
+                    <div class="service-icon">🔐</div>
+                    <div class="service-title">Secrets Manager</div>
+                    <div class="service-desc">
+                        Database Credentials<br>
+                        Application Secrets<br>
+                        Secure Storage
+                    </div>
+                </div>
+            </div>
+
+            <!-- Monitoring & Security -->
+            <h3 style="color: #232F3E; border-bottom: 2px solid #FF9900; padding-bottom: 10px;">📊 Monitoring & Security</h3>
+            <div class="service-row">
+                <div class="service-box">
+                    <div class="service-icon">📈</div>
+                    <div class="service-title">CloudWatch</div>
+                    <div class="service-desc">
+                        Logs: /ecs/bia-*<br>
+                        Metrics: CPU, Memory<br>
+                        Health Checks
+                    </div>
+                </div>
+                <div class="service-box">
+                    <div class="service-icon">🛡️</div>
+                    <div class="service-title">IAM Roles</div>
+                    <div class="service-desc">
+                        CodeBuild Service Role<br>
+                        ECS Task Execution<br>
+                        EC2 Instance Profile
+                    </div>
+                </div>
+                <div class="service-box">
+                    <div class="service-icon">🔧</div>
+                    <div class="service-title">SSM & STS</div>
+                    <div class="service-desc">
+                        Session Manager<br>
+                        Temporary Tokens<br>
+                        Secure Access
+                    </div>
+                </div>
+            </div>
+
+            <!-- CI/CD Tools -->
+            <h3 style="color: #232F3E; border-bottom: 2px solid #FF9900; padding-bottom: 10px;">🚀 CI/CD Tools</h3>
+            <div class="service-row">
+                <div class="service-box">
+                    <div class="service-icon">⚡</div>
+                    <div class="service-title">GitHub Actions</div>
+                    <div class="service-desc">
+                        Workflow Triggers<br>
+                        AWS Credentials<br>
+                        Multi-Environment
+                    </div>
+                </div>
+                <div class="service-box">
+                    <div class="service-icon">🔨</div>
+                    <div class="service-title">CodeBuild</div>
+                    <div class="service-desc">
+                        bia-build-production<br>
+                        bia-build-staging<br>
+                        Docker Build & Push
+                    </div>
+                </div>
+                <div class="service-box">
+                    <div class="service-icon">🌐</div>
+                    <div class="service-title">VPC Network</div>
+                    <div class="service-desc">
+                        Default VPC<br>
+                        Security Groups<br>
+                        us-east-1a
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Environments -->
+        <h3 style="color: #232F3E; border-bottom: 2px solid #FF9900; padding-bottom: 10px;">🌍 Ambientes</h3>
+        <div class="environment-section">
+            <div class="env-box">
+                <div class="env-title">🟢 Production</div>
+                <strong>Branch:</strong> main<br>
+                <strong>URL:</strong> https://bia-prod.exemplo.com<br>
+                <strong>ECR:</strong> bia-production<br>
+                <strong>ECS:</strong> bia-production<br>
+                <strong>Deploy:</strong> Automático via GitHub Actions
+            </div>
+            <div class="env-box staging">
+                <div class="env-title staging">🟡 Staging</div>
+                <strong>Branch:</strong> develop<br>
+                <strong>URL:</strong> https://bia-staging.exemplo.com<br>
+                <strong>ECR:</strong> bia-staging<br>
+                <strong>ECS:</strong> bia-staging<br>
+                <strong>Deploy:</strong> Automático via GitHub Actions
+            </div>
+        </div>
+
+        <!-- Cost Estimation -->
+        <h3 style="color: #232F3E; border-bottom: 2px solid #FF9900; padding-bottom: 10px;">💰 Estimativa de Custos (us-east-1)</h3>
+        <table class="cost-table">
+            <thead>
+                <tr>
+                    <th>Serviço AWS</th>
+                    <th>Configuração</th>
+                    <th>Custo Mensal (USD)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>ECS</td>
+                    <td>2 services (sem custo adicional)</td>
+                    <td>$0.00</td>
+                </tr>
+                <tr>
+                    <td>EC2</td>
+                    <td>2x t3.micro (744h/mês)</td>
+                    <td>$16.80</td>
+                </tr>
+                <tr>
+                    <td>RDS PostgreSQL</td>
+                    <td>1x t3.micro</td>
+                    <td>$12.60</td>
+                </tr>
+                <tr>
+                    <td>ECR</td>
+                    <td>2 repositories (~1GB)</td>
+                    <td>$1.00</td>
+                </tr>
+                <tr>
+                    <td>CloudWatch</td>
+                    <td>Logs + Metrics</td>
+                    <td>$5.00</td>
+                </tr>
+                <tr>
+                    <td>Secrets Manager</td>
+                    <td>2 secrets</td>
+                    <td>$0.80</td>
+                </tr>
+                <tr class="total-row">
+                    <td><strong>TOTAL ESTIMADO</strong></td>
+                    <td><strong>Por mês</strong></td>
+                    <td><strong>~$36.20</strong></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Legend -->
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color" style="background: #4CAF50;"></div>
+                <span>Production Environment</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #FF9800;"></div>
+                <span>Staging Environment</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #2196F3;"></div>
+                <span>CI/CD Pipeline</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #FF9900;"></div>
+                <span>AWS Services</span>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 40px; padding: 20px; background: #f8f9fa; border-radius: 10px;">
+            <p><strong>📋 Projeto BIA - Formação AWS</strong></p>
+            <p>Pipeline automatizado com GitHub Actions + AWS CodeBuild + ECS</p>
+            <p style="font-size: 0.9em; color: #666;">Gerado em: <span id="current-date"></span></p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('current-date').textContent = new Date().toLocaleDateString('pt-BR');
+    </script>
+</body>
+</html>
