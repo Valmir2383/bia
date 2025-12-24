@@ -1,49 +1,29 @@
 version: 0.2
 
-env:
-  variables:
-    ENVIRONMENT: "staging"
-
 phases:
+  install:
+    commands:
+      - echo "Instalando dependências..."
   pre_build:
     commands:
-      - echo "=== Iniciando build para STAGING ==="
+      - echo "Fazendo login no ECR..."
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
-      - REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/bia
-      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
-      - IMAGE_TAG=${COMMIT_HASH:=latest}
-  
+      - REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/seu-repositorio-bia
+      - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
   build:
     commands:
-      - echo Build iniciado em `date`
+      - echo "Build iniciado em `date`"
       - docker build -t $REPOSITORY_URI:latest .
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
-  
   post_build:
     commands:
-      - echo Build finalizado em `date`
+      - echo "Build finalizado. Fazendo push para o ECR..."
       - docker push $REPOSITORY_URI:latest
       - docker push $REPOSITORY_URI:$IMAGE_TAG
-      - echo Writing image definitions file...
+      - echo "Gerando imagedefinitions.json..."
+      # O NOME DO CONTAINER DEVE SER O MESMO QUE ESTÁ NA DEFINIÇÃO DE TAREFA (TASK DEFINITION) DO ECS
       - printf '[{"name":"bia-container","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
-      - echo "Verificando arquivo criado:"
-      - cat imagedefinitions.json
-      - ls -la imagedefinitions.json
-  post_build:
-    commands:
-      - echo Build finalizado em `date`
-      - docker push $REPOSITORY_URI:latest
-      - docker push $REPOSITORY_URI:$IMAGE_TAG
-      - echo Writing image definitions file...
-      - printf '[{"name":"bia-container","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
-      - echo "=== DEBUG COMPLETO ==="
-      - echo "Diretório atual:"
-      - pwd
-      - echo "Conteúdo do arquivo:"
-      - cat imagedefinitions.json
-      - echo "Detalhes do arquivo:"
-      - ls -la imagedefinitions.json
-      - echo "Todos os arquivos .json:"
-      - find . -name "*.json" -type f
-      - echo "Conteúdo do diretório:"
-      - ls -la
+
+artifacts:
+  files:
+    - imagedefinitions.json
