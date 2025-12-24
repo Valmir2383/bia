@@ -29,9 +29,6 @@ RUN cd client && \
         VITE_API_URL=/api npm run build; \
     fi
 
-# Limpeza das dependências de desenvolvimento do client para reduzir tamanho
-RUN cd client && npm prune --production && rm -rf node_modules/.cache
-
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:80/api/versao || exit 1
