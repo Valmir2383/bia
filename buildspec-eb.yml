@@ -3,20 +3,20 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      - echo "=== Preparando código para Elastic Beanstalk ==="
-      - echo "Build iniciado em $(date)"
-  
+      - echo "Build para Elastic Beanstalk iniciado..."
+      - npm install
   build:
     commands:
-      - echo "Validando estrutura do projeto..."
-      - ls -la
-      - echo "Código pronto para deploy no Elastic Beanstalk"
-  
+      - echo "Build da aplicação para EB..."
+      - cd client && npm install --include=dev --legacy-peer-deps --loglevel=error
+      - cd client && VITE_API_URL=/api npm run build
+      - cd ..
   post_build:
     commands:
-      - echo "Build finalizado com sucesso em $(date)"
-      - echo "=== Artefatos prontos para Elastic Beanstalk ==="
+      - echo "Preparando artefatos para Elastic Beanstalk..."
+      - zip -r bia-app.zip . -x "node_modules/*" "client/node_modules/*" ".git/*"
 
 artifacts:
   files:
-    - '**/*'
+    - bia-app.zip
+  name: bia-eb-artifact
