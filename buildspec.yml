@@ -29,10 +29,21 @@ phases:
       - echo "Verificando arquivo criado:"
       - cat imagedefinitions.json
       - ls -la imagedefinitions.json
-artifacts:
-  name: BuildArtifacts
-  files:
-      - imagedefinitions.json
-  base-directory: '.'
-
-
+  post_build:
+    commands:
+      - echo Build finalizado em `date`
+      - docker push $REPOSITORY_URI:latest
+      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - echo Writing image definitions file...
+      - printf '[{"name":"bia-container","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+      - echo "=== DEBUG COMPLETO ==="
+      - echo "Diretório atual:"
+      - pwd
+      - echo "Conteúdo do arquivo:"
+      - cat imagedefinitions.json
+      - echo "Detalhes do arquivo:"
+      - ls -la imagedefinitions.json
+      - echo "Todos os arquivos .json:"
+      - find . -name "*.json" -type f
+      - echo "Conteúdo do diretório:"
+      - ls -la
