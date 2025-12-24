@@ -22,4 +22,4 @@ artifacts:
     files:
       - imagedefinitions.json
     discard-paths: yes
-      - echo "finalizado"
+    
