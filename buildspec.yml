@@ -20,11 +20,13 @@ phases:
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
   
   post_build:
-    commands:
-      - echo Build finalizado em `date`
-      - docker push $REPOSITORY_URI:latest
-      - docker push $REPOSITORY_URI:$IMAGE_TAG
-      - printf '[{"name":"task-def-bia","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
-
+  commands:
+    - echo Build finalizado em `date`
+    - docker push $REPOSITORY_URI:latest
+    - docker push $REPOSITORY_URI:$IMAGE_TAG
+    - echo Writing image definitions file...
+    - printf '[{"name":"bia-container","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
 artifacts:
-  files: imagedefinitions.json
+  files: 
+    - imagedefinitions.json
+
