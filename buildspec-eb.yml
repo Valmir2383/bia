@@ -5,12 +5,11 @@ phases:
     commands:
       - echo "Build para Elastic Beanstalk iniciado..."
       - npm install --loglevel=error
+      - cd client && npm install --include=dev --legacy-peer-deps --loglevel=error && cd ..
   build:
     commands:
       - echo "Build da aplicação para EB..."
-      - cd client && npm install --include=dev --legacy-peer-deps --loglevel=error
-      - cd client && VITE_API_URL=/api npm run build
-      - cd ..
+      - cd client && npm run build && cd ..
   post_build:
     commands:
       - echo "Preparando artefatos para Elastic Beanstalk..."
