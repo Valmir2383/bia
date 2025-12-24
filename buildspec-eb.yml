@@ -4,7 +4,7 @@ phases:
   pre_build:
     commands:
       - echo "Build para Elastic Beanstalk iniciado..."
-      - npm install
+      - npm install --loglevel=error
   build:
     commands:
       - echo "Build da aplicação para EB..."
