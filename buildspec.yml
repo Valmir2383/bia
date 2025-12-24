@@ -1,14 +1,11 @@
 version: 0.2
 
 phases:
-  install:
-    commands:
-      - echo "Instalando dependências..."
   pre_build:
     commands:
       - echo "Fazendo login no ECR..."
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
-      - REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/seu-repositorio-bia
+      - REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/bia
       - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
   build:
     commands:
@@ -17,13 +14,11 @@ phases:
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
   post_build:
     commands:
-      - echo "Build finalizado. Fazendo push para o ECR..."
-      - docker push $REPOSITORY_URI:latest
-      - docker push $REPOSITORY_URI:$IMAGE_TAG
-      - echo "Gerando imagedefinitions.json..."
-      # O NOME DO CONTAINER DEVE SER O MESMO QUE ESTÁ NA DEFINIÇÃO DE TAREFA (TASK DEFINITION) DO ECS
+      - echo "Build finalizado..."
       - printf '[{"name":"bia-container","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+      - ls -la imagedefinitions.json
 
 artifacts:
-  files:
-    - imagedefinitions.json
+    files:
+      - imagedefinitions.json
+    discard-paths: yes
