@@ -21,12 +21,15 @@ phases:
   
   post_build:
   commands:
-    - echo Build finalizado em `date`
-    - docker push $REPOSITORY_URI:latest
-    - docker push $REPOSITORY_URI:$IMAGE_TAG
-    - echo Writing image definitions file...
-    - printf '[{"name":"bia-container","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
-artifacts:
-  files: 
-    - imagedefinitions.json
+      - echo Build finalizado em `date`
+      - docker push $REPOSITORY_URI:latest
+      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - echo Writing image definitions file...
+      - printf '[{"name":"bia-container","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+      - echo "Conteúdo do imagedefinitions.json:"
+      - cat imagedefinitions.json
+      - ls -la imagedefinitions.json
+  artifacts:
+    files: 
+      - imagedefinitions.json
 
