@@ -1,0 +1,22 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo "=== Preparando código para Elastic Beanstalk ==="
+      - echo "Build iniciado em $(date)"
+  
+  build:
+    commands:
+      - echo "Validando estrutura do projeto..."
+      - ls -la
+      - echo "Código pronto para deploy no Elastic Beanstalk"
+  
+  post_build:
+    commands:
+      - echo "Build finalizado com sucesso em $(date)"
+      - echo "=== Artefatos prontos para Elastic Beanstalk ==="
+
+artifacts:
+  files:
+    - '**/*'
