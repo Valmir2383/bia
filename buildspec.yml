@@ -30,7 +30,9 @@ phases:
       - cat imagedefinitions.json
       - ls -la imagedefinitions.json
 artifacts:
+  name: BuildArtifacts
   files:
-    - imagedefinitions.json
+      - imagedefinitions.json
+  base-directory: '.'
 
 
