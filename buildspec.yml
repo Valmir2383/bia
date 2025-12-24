@@ -1,22 +1,30 @@
 version: 0.2
 
+env:
+  variables:
+    ENVIRONMENT: "staging"
+
 phases:
   pre_build:
     commands:
-      - echo "=== Preparando código para Elastic Beanstalk ==="
-      - echo "Build iniciado em $(date)"
+      - echo "=== Iniciando build para STAGING ==="
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+      - REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/bia
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=${COMMIT_HASH:=latest}
   
   build:
     commands:
-      - echo "Validando estrutura do projeto..."
-      - ls -la
-      - echo "Código pronto para deploy no Elastic Beanstalk"
+      - echo Build iniciado em `date`
+      - docker build -t $REPOSITORY_URI:latest .
+      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
   
   post_build:
     commands:
-      - echo "Build finalizado com sucesso em $(date)"
-      - echo "=== Artefatos prontos para Elastic Beanstalk ==="
+      - echo Build finalizado em `date`
+      - docker push $REPOSITORY_URI:latest
+      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - printf '[{"name":"task-def-bia","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
 
 artifacts:
-  files:
-    - '**/*'
+  files: imagedefinitions.json
