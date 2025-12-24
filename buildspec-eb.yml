@@ -1,6 +1,9 @@
 version: 0.2
 
 phases:
+  install:
+    runtime-versions:
+      nodejs: 18
   pre_build:
     commands:
       - echo "Build para Elastic Beanstalk iniciado..."
