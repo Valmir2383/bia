@@ -16,7 +16,7 @@ RUN npm install --loglevel=error
 
 # Copiar package.json do client e instalar dependências (incluindo devDependencies para build)
 COPY client/package*.json ./client/
-RUN cd client && npm install --legacy-peer-deps --loglevel=error
+RUN cd client && npm install --include=dev --legacy-peer-deps --loglevel=error
 
 # Copiar todos os arquivos
 COPY . .
