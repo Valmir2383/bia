@@ -20,16 +20,17 @@ phases:
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
   
   post_build:
-  commands:
+    commands:
       - echo Build finalizado em `date`
       - docker push $REPOSITORY_URI:latest
       - docker push $REPOSITORY_URI:$IMAGE_TAG
       - echo Writing image definitions file...
       - printf '[{"name":"bia-container","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
-      - echo "Conteúdo do imagedefinitions.json:"
+      - echo "Verificando arquivo criado:"
       - cat imagedefinitions.json
       - ls -la imagedefinitions.json
-  artifacts:
-    files: 
-      - imagedefinitions.json
+artifacts:
+  files:
+    - imagedefinitions.json
+
 
