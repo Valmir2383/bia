@@ -14,11 +14,15 @@ phases:
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
   post_build:
     commands:
-      - echo "Build finalizado..."
+      - echo "Build finalizado... Puxando imagem para o ECR"
+      - docker push $REPOSITORY_URI:latest
+      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - echo "Gerando arquivo para o ECS..."
       - printf '[{"name":"bia-container","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
       - ls -la imagedefinitions.json
 
 artifacts:
     files:
       - imagedefinitions.json
-    discard-paths: yes
+      - Dockerrun.aws.json  # Adicionei este para o Beanstalk
+    discard-paths: no      # Mudei para 'no' para proteger a estrutura

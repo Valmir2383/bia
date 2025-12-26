@@ -1,0 +1,22 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 18
+  pre_build:
+    commands:
+      - echo "Preparando para Elastic Beanstalk..."
+      - npm install --loglevel=error
+  build:
+    commands:
+      - echo "Empacotando aplicação para EB..."
+  post_build:
+    commands:
+      - echo "Criando artefato..."
+      - zip -r bia-app.zip . -x "node_modules/*" ".git/*"
+
+artifacts:
+  files:
+    - bia-app.zip
+  name: bia-eb-artifact
