@@ -1,11 +1,11 @@
-## Projeto base para o evento Imersão AWS & IA que irei realizar.
+## Projeto desafios Labs 2.0 Dezembro 2025.
 
-### Período do evento: 27/09 e 28/09/2025 (Online e ao Vivo às 20h)
+### Code Pipeline, Beanstalk e ECS
 
-[>> Página de Inscrição do evento](https://org.imersaoaws.com.br/github/readme)
+[>> Página do Projeto ](Bia-env.eba-muade2pb.us-east-1.elasticbeanstalk.com 
+)
 
-#### Para rodar as migrations no container ####
-```
-docker compose exec server bash -c 'npx sequelize db:migrate'
-```
+#### Rumo ao Proximo nível ####
+
+
 
