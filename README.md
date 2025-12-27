@@ -2,7 +2,7 @@
 
 ### Code Pipeline, Beanstalk e ECS
 
-[>> Página do Projeto ](Bia-env.eba-muade2pb.us-east-1.elasticbeanstalk.com 
+[>> Página do Projeto ](http://bia-env.eba-muade2pb.us-east-1.elasticbeanstalk.com/)
 )
 
 #### Rumo ao Proximo nível ####
