@@ -1,0 +1,32 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo "Fazendo login no ECR..."
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+      - REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/bia
+      - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+  build:
+    commands:
+      - echo "Build iniciado em `date`"
+      - echo "Gerando imagem da BIA.."
+      - docker build -t $REPOSITORY_URI:latest .
+      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
+      - echo "Imagens criadas. Verificando..."
+      - docker images
+      - codebuild-breakpoint
+  post_build:
+    commands:
+      - echo "Build finalizado... Puxando imagem para o ECR"
+      - docker push $REPOSITORY_URI:latest
+      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - echo "Gerando arquivo para o ECS..."
+      - printf '[{"name":"bia-container","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+      - ls -la imagedefinitions.json
+
+artifacts:
+    files:
+      - imagedefinitions.json
+      - Dockerrun.aws.json  
+    discard-paths: no      
