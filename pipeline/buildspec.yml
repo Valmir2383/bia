@@ -15,7 +15,8 @@ phases:
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
       - echo "Imagens criadas. Verificando..."
       - docker images
-      - echo "Parando no breakpoint para debug via SSM..."
+      - echo "=== BREAKPOINT ATIVO - Conecte via SSM ==="
+      - echo "Network Interface ID:" $(curl -s http://169.254.169.254/latest/meta-data/network/interfaces/macs/ | head -1 | xargs -I {} curl -s http://169.254.169.254/latest/meta-data/network/interfaces/macs/{}/interface-id)
       - codebuild-breakpoint
   post_build:
     commands:
