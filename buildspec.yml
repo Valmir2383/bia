@@ -10,8 +10,12 @@ phases:
   build:
     commands:
       - echo "Build iniciado em `date`"
+      - echo "Gerando imagem da BIA.."
       - docker build -t $REPOSITORY_URI:latest .
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
+      - echo "Imagens criadas. Verificando..."
+      - docker images
+      - codebuild-breakpoint
   post_build:
     commands:
       - echo "Build finalizado... Puxando imagem para o ECR"
@@ -24,5 +28,5 @@ phases:
 artifacts:
     files:
       - imagedefinitions.json
-      - Dockerrun.aws.json  # Adicionei este para o Beanstalk
-    discard-paths: no      # Mudei para 'no' para proteger a estrutura
+      - Dockerrun.aws.json  
+    discard-paths: no      
