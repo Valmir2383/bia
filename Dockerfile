@@ -15,7 +15,7 @@ RUN cd client && npm install --legacy-peer-deps --loglevel=error
 # Copiar todos os arquivos
 COPY . .
 
-# Build do front-end com Vite teste
+# Build do front-end com Vite valendo
 RUN cd client && VITE_API_URL=https://imersao-alb.labvalmirjraws.com.br npm run build
 
 # Limpeza das dependências de desenvolvimento do client para reduzir tamanho
