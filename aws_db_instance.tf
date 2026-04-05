@@ -21,7 +21,7 @@ resource "aws_db_instance" "bia" {
   domain_iam_role_name                  = null
   enabled_cloudwatch_logs_exports       = []
   engine                                = "postgres"
-  engine_version                        = "16.1"
+  engine_version                        = "17"
   final_snapshot_identifier             = null
   iam_database_authentication_enabled   = false
   identifier                            = "bia"

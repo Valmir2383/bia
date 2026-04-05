@@ -1,5 +1,5 @@
 locals {
-  vpc_id="[SEU_VPC_IP]"
-  subnet_zona_a="[SUA_SUBNET_ZONA_A]"
-  subnet_zona_b="[SUA_SUBNET_ZONA_B]"
+  vpc_id="vpc-0da3ec6e3d89b326d"
+  subnet_zona_a="subnet-093e57923857e5cb9"
+  subnet_zona_b="subnet-0640dae0d648e8ce1"
 }
